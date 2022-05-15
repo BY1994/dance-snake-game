@@ -50,15 +50,17 @@
     
     // Get the canvas element
     const snakeboard = document.getElementById("snakeboard");
+    document.addEventListener("keydown", change_direction);
     // Return a two dimensional drawing context
     const snakeboard_ctx = snakeboard.getContext("2d");
     // Start game
-    main();
+    var background = new Image();
+    background.src = "background_temp.png";
+    background.onload = function(){
+        main();
+        gen_food();
+    }
 
-    gen_food();
-
-    document.addEventListener("keydown", change_direction);
-    
     // main function called repeatedly to keep the game running
     function main() {
 
@@ -77,14 +79,7 @@
     
     // draw a border around the canvas
     function clear_board() {
-      //  Select the colour to fill the drawing
-      snakeboard_ctx.fillStyle = board_background;
-      //  Select the colour for the border of the canvas
-      snakeboard_ctx.strokestyle = board_border;
-      // Draw a "filled" rectangle to cover the entire canvas
-      snakeboard_ctx.fillRect(0, 0, snakeboard.width, snakeboard.height);
-      // Draw a "border" around the entire canvas
-      snakeboard_ctx.strokeRect(0, 0, snakeboard.width, snakeboard.height);
+        snakeboard_ctx.drawImage(background, 0, 0, 400, 400);
     }
     
     // Draw the snake on the canvas
