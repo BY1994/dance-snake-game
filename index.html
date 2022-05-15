@@ -54,13 +54,29 @@
     document.addEventListener("keydown", change_direction);
     // Return a two dimensional drawing context
     const snakeboard_ctx = snakeboard.getContext("2d");
-    // Start game
-    var background = new Image();
-    background.src = "background_temp.png";
-    background.onload = function(){
+
+    var Counter = 0;
+    var TotalImages = 2;
+
+    var onloadCallback = function(){
+        // Increment the counter
+        Counter++;
+
+        // Verify if the counter is less than the number of images
+        if(Counter < TotalImages){
+            return;
+        }
+        // Trigger the final callback if is the last img
         main();
         gen_food();
-    }
+    };
+
+    var background = new Image();
+    var character = new Image();
+    background.src = "background_temp.png";
+    character.src = "character_temp.png";
+    background.onload = onloadCallback;
+    character.onload = onloadCallback;
 
     // main function called repeatedly to keep the game running
     function main() {
@@ -90,24 +106,12 @@
     }
 
     function drawFood() {
-      snakeboard_ctx.fillStyle = 'lightgreen';
-      snakeboard_ctx.strokestyle = 'darkgreen';
-      snakeboard_ctx.fillRect(food_x, food_y, character_size, character_size);
-      snakeboard_ctx.strokeRect(food_x, food_y, character_size, character_size);
+        snakeboard_ctx.drawImage(character, food_x, food_y, character_size, character_size);
     }
     
     // Draw one snake part
     function drawSnakePart(snakePart) {
-
-      // Set the colour of the snake part
-      snakeboard_ctx.fillStyle = snake_col;
-      // Set the border colour of the snake part
-      snakeboard_ctx.strokestyle = snake_border;
-      // Draw a "filled" rectangle to represent the snake part at the coordinates
-      // the part is located
-      snakeboard_ctx.fillRect(snakePart.x, snakePart.y, character_size, character_size);
-      // Draw a border around the snake part
-      snakeboard_ctx.strokeRect(snakePart.x, snakePart.y, character_size, character_size);
+        snakeboard_ctx.drawImage(character, snakePart.x, snakePart.y, character_size, character_size);
     }
 
     function has_game_ended() {
