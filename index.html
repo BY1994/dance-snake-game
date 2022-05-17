@@ -47,7 +47,9 @@
     let dx = character_size;
     // Vertical velocity
     let dy = 0;
-    
+    // arm direction
+    var arm = 1;
+    var character01 = new Array();
     
     // Get the canvas element
     const snakeboard = document.getElementById("snakeboard");
@@ -56,7 +58,7 @@
     const snakeboard_ctx = snakeboard.getContext("2d");
 
     var Counter = 0;
-    var TotalImages = 2;
+    var TotalImages = 4;
 
     var onloadCallback = function(){
         // Increment the counter
@@ -72,11 +74,18 @@
     };
 
     var background = new Image();
-    var character = new Image();
+    character01[0] = new Image();
+    character01[1] = new Image();
+    character01[2] = new Image();
     background.src = "background_temp.png";
-    character.src = "character_temp.png";
+    character01[0].src = "character01_down_default.png";
+    character01[1].src = "character01_down_left.png";
+    character01[2].src = "character01_down_right.png";
+    
     background.onload = onloadCallback;
-    character.onload = onloadCallback;
+    character01[0].onload = onloadCallback;
+    character01[1].onload = onloadCallback;
+    character01[2].onload = onloadCallback;
 
     // main function called repeatedly to keep the game running
     function main() {
@@ -84,6 +93,8 @@
         if (has_game_ended()) return;
 
         changing_direction = false;
+        if (arm == 1) arm = 2;
+        else arm = 1;
         setTimeout(function onTick() {
         clear_board();
         drawFood();
@@ -106,12 +117,12 @@
     }
 
     function drawFood() {
-        snakeboard_ctx.drawImage(character, food_x, food_y, character_size, character_size);
+        snakeboard_ctx.drawImage(character01[0], food_x, food_y, character_size, character_size);
     }
     
     // Draw one snake part
     function drawSnakePart(snakePart) {
-        snakeboard_ctx.drawImage(character, snakePart.x, snakePart.y, character_size, character_size);
+        snakeboard_ctx.drawImage(character01[arm], snakePart.x, snakePart.y, character_size, character_size);
     }
 
     function has_game_ended() {
