@@ -30,11 +30,12 @@
     const snake_border = 'darkblue';
     
     let snake = [
-      {x: 200, y: 200},
-      {x: 190, y: 200},
-      {x: 180, y: 200},
-      {x: 170, y: 200},
-      {x: 160, y: 200}
+      {index: 0, char: 0},
+    ]
+
+    // d: 0 down 1 up 2 left 3 right
+    let pos = [
+        {x: 200, y: 200, d: 0},
     ]
 
     var character_size = 40;
@@ -47,9 +48,12 @@
     let dx = character_size;
     // Vertical velocity
     let dy = 0;
+    let dir = 0;
     // arm direction
     var arm = 1;
+    var characternum = 1;
     var character01 = new Array();
+    var character02 = new Array();
     
     // Get the canvas element
     const snakeboard = document.getElementById("snakeboard");
@@ -58,7 +62,7 @@
     const snakeboard_ctx = snakeboard.getContext("2d");
 
     var Counter = 0;
-    var TotalImages = 4;
+    var TotalImages = 7;
 
     var onloadCallback = function(){
         // Increment the counter
@@ -77,15 +81,25 @@
     character01[0] = new Image();
     character01[1] = new Image();
     character01[2] = new Image();
+    character02[0] = new Image();
+    character02[1] = new Image();
+    character02[2] = new Image();
+
     background.src = "background_temp.png";
     character01[0].src = "character01_down_default.png";
     character01[1].src = "character01_down_left.png";
     character01[2].src = "character01_down_right.png";
+    character02[0].src = "character02_down_default.png";
+    character02[1].src = "character02_down_left.png";
+    character02[2].src = "character02_down_right.png";
     
     background.onload = onloadCallback;
     character01[0].onload = onloadCallback;
     character01[1].onload = onloadCallback;
     character01[2].onload = onloadCallback;
+    character02[0].onload = onloadCallback;
+    character02[1].onload = onloadCallback;
+    character02[2].onload = onloadCallback;
 
     // main function called repeatedly to keep the game running
     function main() {
@@ -117,22 +131,30 @@
     }
 
     function drawFood() {
-        snakeboard_ctx.drawImage(character01[0], food_x, food_y, character_size, character_size);
+        if (characternum == 0)
+            snakeboard_ctx.drawImage(character01[0], food_x, food_y, character_size, character_size);
+        else
+            snakeboard_ctx.drawImage(character02[0], food_x, food_y, character_size, character_size);
     }
     
     // Draw one snake part
     function drawSnakePart(snakePart) {
-        snakeboard_ctx.drawImage(character01[arm], snakePart.x, snakePart.y, character_size, character_size);
+        var index = snakePart.index;
+
+        if (snakePart.char == 0)
+            snakeboard_ctx.drawImage(character01[arm], pos[index].x, pos[index].y, character_size, character_size);
+        else
+            snakeboard_ctx.drawImage(character02[arm], pos[index].x, pos[index].y, character_size, character_size);
     }
 
     function has_game_ended() {
-      for (let i = 4; i < snake.length; i++) {
-        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true
+      for (let i = 4; i < pos.length; i++) {
+        if (pos[i].x === pos[0].x && pos[i].y === pos[0].y) return true
       }
-      const hitLeftWall = snake[0].x < 0;
-      const hitRightWall = snake[0].x > snakeboard.width - character_size;
-      const hitToptWall = snake[0].y < 0;
-      const hitBottomWall = snake[0].y > snakeboard.height - character_size;
+      const hitLeftWall = pos[0].x < 0;
+      const hitRightWall = pos[0].x > snakeboard.width - character_size;
+      const hitToptWall = pos[0].y < 0;
+      const hitBottomWall = pos[0].y > snakeboard.height - character_size;
       return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
     }
 
@@ -146,7 +168,7 @@
       // Generate a random number for the food y-coordinate
       food_y = random_food(0, snakeboard.height - character_size);
       // if the new food location is where the snake currently is, generate a new food location
-      snake.forEach(function has_snake_eaten_food(part) {
+      pos.forEach(function has_snake_eaten_food(part) {
         const has_eaten = part.x == food_x && part.y == food_y;
         if (has_eaten) gen_food();
       });
@@ -170,37 +192,45 @@
       if (keyPressed === LEFT_KEY && !goingRight) {
         dx = -character_size;
         dy = 0;
+        dir = 2;
       }
       if (keyPressed === UP_KEY && !goingDown) {
         dx = 0;
         dy = -character_size;
+        dir = 1;
       }
       if (keyPressed === RIGHT_KEY && !goingLeft) {
         dx = character_size;
         dy = 0;
+        dir = 3;
       }
       if (keyPressed === DOWN_KEY && !goingUp) {
         dx = 0;
         dy = character_size;
+        dir = 0;
       }
     }
 
     function move_snake() {
       // Create the new Snake's head
-      const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+      const head = {x: pos[0].x + dx, y: pos[0].y + dy, d: dir};
       // Add the new head to the beginning of snake body
-      snake.unshift(head);
-      const has_eaten_food = snake[0].x === food_x && snake[0].y === food_y;
+      pos.unshift(head);
+      const has_eaten_food = pos[0].x === food_x && pos[0].y === food_y;
       if (has_eaten_food) {
+          const tail = {index: snake.length, char: characternum};
+          snake.push(tail);
         // Increase score
         score += 10;
         // Display score on screen
         document.getElementById('score').innerHTML = score;
         // Generate new food location
         gen_food();
+        // change next coming character
+        characternum = (characternum+1)%2;
       } else {
         // Remove the last part of snake body
-        snake.pop();
+        pos.pop();
       }
     }
     
