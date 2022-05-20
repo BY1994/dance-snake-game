@@ -223,7 +223,7 @@
     }
 
     function has_game_ended() {
-      for (let i = 4; i < pos.length; i++) {
+      for (let i = 1; i < pos.length; i++) {
         if (pos[i].x === pos[0].x && pos[i].y === pos[0].y) return true
       }
       const hitLeftWall = pos[0].x < 0;
