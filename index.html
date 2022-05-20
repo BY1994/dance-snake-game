@@ -54,6 +54,7 @@
     var characternum = 1;
     var character01 = new Array();
     var character02 = new Array();
+    var character03 = new Array();
     
     // Get the canvas element
     const snakeboard = document.getElementById("snakeboard");
@@ -62,7 +63,7 @@
     const snakeboard_ctx = snakeboard.getContext("2d");
 
     var Counter = 0;
-    var TotalImages = 19;
+    var TotalImages = 28;
 
     var onloadCallback = function(){
         // Increment the counter
@@ -98,6 +99,16 @@
     character02[7] = new Image();
     character02[8] = new Image();
 
+    character03[0] = new Image();
+    character03[1] = new Image();
+    character03[2] = new Image();
+    character03[3] = new Image();
+    character03[4] = new Image();
+    character03[5] = new Image();
+    character03[6] = new Image();
+    character03[7] = new Image();
+    character03[8] = new Image();
+
     background.src = "background_temp.png";
     character01[0].src = "character01_down_default.png";
     character01[1].src = "character01_down_left.png";
@@ -119,6 +130,16 @@
     character02[7].src = "character02_right_left.png";
     character02[8].src = "character02_right_right.png";
     
+    character03[0].src = "character03_down_default.png";    
+    character03[1].src = "character03_down_left.png";
+    character03[2].src = "character03_down_right.png";
+    character03[3].src = "character03_up_left.png";
+    character03[4].src = "character03_up_right.png";
+    character03[5].src = "character03_left_left.png";
+    character03[6].src = "character03_left_right.png";
+    character03[7].src = "character03_right_left.png";
+    character03[8].src = "character03_right_right.png";
+
     background.onload = onloadCallback;
     character01[0].onload = onloadCallback;
     character01[1].onload = onloadCallback;
@@ -139,6 +160,16 @@
     character02[6].onload = onloadCallback;
     character02[7].onload = onloadCallback;
     character02[8].onload = onloadCallback;
+
+    character03[0].onload = onloadCallback;
+    character03[1].onload = onloadCallback;
+    character03[2].onload = onloadCallback;
+    character03[3].onload = onloadCallback;
+    character03[4].onload = onloadCallback;
+    character03[5].onload = onloadCallback;
+    character03[6].onload = onloadCallback;
+    character03[7].onload = onloadCallback;
+    character03[8].onload = onloadCallback;
 
     // main function called repeatedly to keep the game running
     function main() {
@@ -172,8 +203,10 @@
     function drawFood() {
         if (characternum == 0)
             snakeboard_ctx.drawImage(character01[0], food_x, food_y, character_size, character_size);
-        else
+        else if (characternum == 1)
             snakeboard_ctx.drawImage(character02[0], food_x, food_y, character_size, character_size);
+        else
+            snakeboard_ctx.drawImage(character03[0], food_x, food_y, character_size, character_size);
     }
     
     // Draw one snake part
@@ -183,8 +216,10 @@
 
         if (snakePart.char == 0)
             snakeboard_ctx.drawImage(character01[imagedir+arm], pos[index].x, pos[index].y, character_size, character_size);
-        else
+        else if (snakePart.char == 1)
             snakeboard_ctx.drawImage(character02[imagedir+arm], pos[index].x, pos[index].y, character_size, character_size);
+        else
+            snakeboard_ctx.drawImage(character03[imagedir+arm], pos[index].x, pos[index].y, character_size, character_size);
     }
 
     function has_game_ended() {
@@ -267,7 +302,7 @@
         // Generate new food location
         gen_food();
         // change next coming character
-        characternum = (characternum+1)%2;
+        characternum = (characternum+1)%3;
       } else {
         // Remove the last part of snake body
         pos.pop();
