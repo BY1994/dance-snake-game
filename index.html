@@ -7,7 +7,7 @@
   <body>
 
     <div id="score">0</div>
-    <canvas id="snakeboard" width="480" height="480"></canvas>
+    <canvas id="snakeboard" width="960" height="960"></canvas>
     <div id="buttons">
       <input type="image" class="button" id="up_key" src="button_up.png" width="150" onclick="change_direction_for_mobile(38)"/>
       <input type="image" class="button" id="left_key" src="button_left.png" width ="150" onclick="change_direction_for_mobile(37)"/>
@@ -63,7 +63,7 @@
     const board_background = "white";
     const snake_col = 'lightblue';
     const snake_border = 'darkblue';
-    
+
     let snake = [
       {index: 0, char: 0},
     ]
@@ -73,7 +73,7 @@
         {x: 200, y: 200, d: 0},
     ]
 
-    var character_size = 40;
+    var character_size = 80;
     let score = 0;
     // True if changing direction
     let changing_direction = false;
@@ -226,7 +226,7 @@
     
     // draw a border around the canvas
     function clear_board() {
-        snakeboard_ctx.drawImage(background, 0, 0, 480, 480);
+        snakeboard_ctx.drawImage(background, 0, 0, 960, 960);
     }
     
     // Draw the snake on the canvas
