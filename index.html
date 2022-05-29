@@ -302,7 +302,9 @@
         // Generate new food location
         gen_food();
         // change next coming character
-        characternum = (characternum+1)%3;
+        if (characternum == 1) characternum = 2;
+        else characternum = 1;
+        //characternum = (characternum+1)%3;
       } else {
         // Remove the last part of snake body
         pos.pop();
