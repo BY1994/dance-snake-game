@@ -7,13 +7,7 @@
   <body>
 
     <div id="score">0</div>
-    <canvas id="snakeboard" width="480" height="480"></canvas>
-    <div id="buttons">
-      <input type="image" class="button" id="up_key" src="button_up.png" width="150" onclick="change_direction_for_mobile(38)"/>
-      <input type="image" class="button" id="left_key" src="button_left.png" width ="150" onclick="change_direction_for_mobile(37)"/>
-      <input type="image" class="button" id="right_key" src="button_right.png" width = "150" onclick="change_direction_for_mobile(39)"/>
-      <input type="image" class="button" id="down_key" src="button_down.png" width = "150" onclick="change_direction_for_mobile(40)"/>
-    </div>
+    <canvas id="snakeboard" width="400" height="400"></canvas>
 
     <style>
       #snakeboard {
@@ -26,35 +20,6 @@
         text-align: center;
         font-size: 140px;
       }
-      #buttons {
-        position:absolute;
-        top: 80%;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      #up_key{
-        position:relative;
-        top:0%;
-      }
-      #down_key{
-        position:absolute;
-        top: 200%;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      #left_key{
-        position:absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-150%);
-      }
-      #right_key{
-        position:absolute;
-        top: 100%;
-        right: 50%;
-        transform: translateX(150%);
-      }
-
     </style>
   </body>
 
@@ -226,7 +191,7 @@
     
     // draw a border around the canvas
     function clear_board() {
-        snakeboard_ctx.drawImage(background, 0, 0, 480, 480);
+        snakeboard_ctx.drawImage(background, 0, 0, 400, 400);
     }
     
     // Draw the snake on the canvas
@@ -295,41 +260,6 @@
       if (changing_direction) return;
       changing_direction = true;
       const keyPressed = event.keyCode;
-      const goingUp = dy === -character_size;
-      const goingDown = dy === character_size;
-      const goingRight = dx === character_size;
-      const goingLeft = dx === -character_size;
-      if (keyPressed === LEFT_KEY && !goingRight) {
-        dx = -character_size;
-        dy = 0;
-        dir = 2;
-      }
-      if (keyPressed === UP_KEY && !goingDown) {
-        dx = 0;
-        dy = -character_size;
-        dir = 1;
-      }
-      if (keyPressed === RIGHT_KEY && !goingLeft) {
-        dx = character_size;
-        dy = 0;
-        dir = 3;
-      }
-      if (keyPressed === DOWN_KEY && !goingUp) {
-        dx = 0;
-        dy = character_size;
-        dir = 0;
-      }
-    }
-
-    function change_direction_for_mobile(keyPressed) {
-      const LEFT_KEY = 37;
-      const RIGHT_KEY = 39;
-      const UP_KEY = 38;
-      const DOWN_KEY = 40;
-      
-    // Prevent the snake from reversing    
-      if (changing_direction) return;
-      changing_direction = true;
       const goingUp = dy === -character_size;
       const goingDown = dy === character_size;
       const goingRight = dx === character_size;
