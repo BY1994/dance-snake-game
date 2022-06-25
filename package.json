@@ -1,0 +1,20 @@
+{
+  "name": "dancing-game",
+  "version": "1.0.0",
+  "description": "Dancing in Practice Room",
+  "main": "main.js",
+  "author": "BY1994",
+  "icon": "assets/icon.ico",
+  "devDependencies": {
+    "electron": "15.3.0"
+  },
+  "build": {
+    "asar": false,
+    "win": {
+      "icon": "assets/icon.ico"
+    }
+  },
+  "scripts": {
+    "start": "electron ."
+  }
+}
