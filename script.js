@@ -89,7 +89,7 @@ character03[6] = new Image();
 character03[7] = new Image();
 character03[8] = new Image();
 
-background.src = "assets/background_temp.png";
+background.src = "assets/background.png";
 start_button.src = "assets/start_button.png";
 end_button.src = "assets/replay_button.png";
 character01[0].src = "assets/character01_down_default.png";
