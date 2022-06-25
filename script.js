@@ -52,6 +52,10 @@ var onloadCallback = function(){
     gen_food();
 };
 
+let start_sound = new Audio('game-start.mp3');
+let collect_sound = new Audio('collect.mp3');
+let background_music = new Audio('background_music.mp3');
+
 var background = new Image();
 var start_button = new Image();
 var end_button = new Image();
@@ -199,6 +203,9 @@ function main() {
       game_doing = true;
       dx = character_size;
       dy = 0;
+      background_music.play();
+      background_music.currentTime = 0;
+      start_sound.play();
       do_game();
     }
   } else if (currentScene == 3) {
@@ -339,6 +346,7 @@ function move_snake() {
   pos.unshift(head);
   const has_eaten_food = pos[0].x === food_x && pos[0].y === food_y;
   if (has_eaten_food) {
+      collect_sound.play();
       const tail = {index: snake.length, char: characternum};
       snake.push(tail);
     // Generate new food location
