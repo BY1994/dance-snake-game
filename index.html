@@ -38,6 +38,7 @@
         {x: 200, y: 200, d: 0},
     ]
 
+    var currentScene = 1;
     var character_size = 40;
     let score = 0;
     // True if changing direction
@@ -63,7 +64,7 @@
     const snakeboard_ctx = snakeboard.getContext("2d");
 
     var Counter = 0;
-    var TotalImages = 28;
+    var TotalImages = 30;
 
     var onloadCallback = function(){
         // Increment the counter
@@ -79,6 +80,8 @@
     };
 
     var background = new Image();
+    var start_button = new Image();
+    var end_button = new Image();
     character01[0] = new Image();
     character01[1] = new Image();
     character01[2] = new Image();
@@ -110,6 +113,8 @@
     character03[8] = new Image();
 
     background.src = "background_temp.png";
+    start_button.src = "start_button.png";
+    end_button.src = "replay_button.png";
     character01[0].src = "character01_down_default.png";
     character01[1].src = "character01_down_left.png";
     character01[2].src = "character01_down_right.png";
@@ -141,6 +146,8 @@
     character03[8].src = "character03_right_right.png";
 
     background.onload = onloadCallback;
+    start_button.onload = onloadCallback;
+    end_button.onload = onloadCallback;
     character01[0].onload = onloadCallback;
     character01[1].onload = onloadCallback;
     character01[2].onload = onloadCallback;
@@ -171,10 +178,72 @@
     character03[7].onload = onloadCallback;
     character03[8].onload = onloadCallback;
 
-    // main function called repeatedly to keep the game running
-    function main() {
+    snakeboard.onclick = click_button;
 
-        if (has_game_ended()) return;
+    function draw_start_button(){
+      snakeboard_ctx.drawImage(start_button, 0, 128, 400, 144);
+    }
+
+    function draw_end_button(){
+      snakeboard_ctx.drawImage(end_button, 0, 128, 400, 144);
+    }
+
+    function click_button(event) {
+      var rect = snakeboard.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+
+        console.log("(" + x + ", " + y + ") is clicked.");
+
+        if (currentScene == 1) {
+          if (x > 0 && x < 400 && y > 128 && y < 272) currentScene = 2;
+        }
+        else if (currentScene == 3) {
+          if (x > 0 && x < 400 && y > 128 && y < 272) currentScene = 2;
+        }
+    }
+
+    function start_game() {
+      clear_board();
+      draw_start_button();
+    }
+
+    function end_game() {
+      draw_end_button();
+    }
+
+    // main function called repeatedly to keep the game running
+    var game_doing = false;
+    function main() {
+      if (currentScene == 1) {
+        start_game();
+      } else if (currentScene == 2) {
+        if (game_doing == false) {
+          snake = [
+            {index: 0, char: 0},
+          ]
+          pos = [
+            {x: 200, y: 200, d: 0},
+          ]
+          game_doing = true;
+          dx = character_size;
+          dy = 0;
+          do_game();
+        }
+      } else if (currentScene == 3) {
+        end_game();
+      }
+      setTimeout(function onTick() {
+        main();
+        }, 100)
+    }
+
+    function do_game() {
+      if (has_game_ended()) {
+        currentScene = 3;
+        game_doing = false;
+        return;
+      }
 
         changing_direction = false;
         if (arm == 1) arm = 2;
@@ -185,8 +254,8 @@
         move_snake();
         drawSnake();
         // Repeat
-        main();
-      }, 150)
+        do_game();
+        }, 150)
     }
     
     // draw a border around the canvas
@@ -254,12 +323,18 @@
       const RIGHT_KEY = 39;
       const UP_KEY = 38;
       const DOWN_KEY = 40;
+      const SPACE_BAR = 32;
+
+      const keyPressed = event.keyCode;
+      if (keyPressed == SPACE_BAR) {
+        if (currentScene == 1) currentScene = 2;
+        else if (currentScene == 3) currentScene = 2;
+      }
       
     // Prevent the snake from reversing
     
       if (changing_direction) return;
       changing_direction = true;
-      const keyPressed = event.keyCode;
       const goingUp = dy === -character_size;
       const goingDown = dy === character_size;
       const goingRight = dx === character_size;
