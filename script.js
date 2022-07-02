@@ -233,7 +233,7 @@ function do_game() {
     drawSnake();
     // Repeat
     do_game();
-    }, 150)
+    }, 250)
 }
 
 // draw a border around the canvas
